@@ -6,34 +6,41 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      userinfo: {
-        username: "Wiliam Tae Sung Lee",
-        photo: "https://avatars0.githubusercontent.com/u/41973973?v=4",
-        login: "wiliamtaesunglee",
-        repos: 12,
-        followers: 10,
-        following: 10
-      },
-      repos: [
-        {
-          name: "Repo",
-          link: "#"
-        }
-      ],
-      starred: [
-        {
-          name: "Repos",
-          link: "#"
-        }
-      ]
+      userinfo: null,
+      repos: [],
+      starred: []
     };
   }
+
+  handleSearch(e) {
+    const value = e.target.value;
+    const keyCode = e.wich || e.keyCode;
+    const ENTER = 13;
+    if (keyCode === ENTER) {
+      fetch(`http://api.github.com/users/${value}`)
+        .then(res => res.json())
+        .then(result =>
+          this.setState({
+            userinfo: {
+              username: result.name,
+              photo: result.avatar_url,
+              login: result.login,
+              repos: result.public_repos,
+              followers: result.followers,
+              following: result.following
+            }
+          })
+        );
+    }
+  }
+
   render() {
     return (
       <AppContent
         userinfo={this.state.userinfo}
         repos={this.state.repos}
         starred={this.state.starred}
+        handleSearch={e => this.handleSearch(e)}
       />
     );
   }
