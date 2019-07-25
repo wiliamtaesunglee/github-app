@@ -36,12 +36,21 @@ class App extends Component {
     }
   }
 
-  getRepo() {
-    console.log("repo");
-  }
-
-  getFav() {
-    console.log("fev");
+  getRepo(link) {
+    return e => {
+      fetch(`http://api.github.com/users/wiliamtaesunglee/${link}`)
+        .then(res => res.json())
+        .then(result => {
+          this.setState({
+            [link]: result.map(rep => {
+              return {
+                name: rep.name,
+                link: rep.html_url
+              };
+            })
+          });
+        });
+    };
   }
 
   render() {
@@ -51,8 +60,8 @@ class App extends Component {
         repos={this.state.repos}
         starred={this.state.starred}
         handleSearch={e => this.handleSearch(e)}
-        getFav={() => this.getFav()}
-        getRepo={() => this.getRepo()}
+        getFav={this.getRepo("starred")}
+        getRepo={this.getRepo("repos")}
       />
     );
   }
