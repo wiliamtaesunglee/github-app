@@ -27,11 +27,21 @@ class App extends Component {
               login: result.login,
               repos: result.public_repos,
               followers: result.followers,
-              following: result.following
+              following: result.following,
+              reposURL: result.repos_url,
+              favoritsURL: result.subscriptions_url
             }
           })
         );
     }
+  }
+
+  getRepo() {
+    console.log("repo");
+  }
+
+  getFav() {
+    console.log("fev");
   }
 
   render() {
@@ -41,6 +51,8 @@ class App extends Component {
         repos={this.state.repos}
         starred={this.state.starred}
         handleSearch={e => this.handleSearch(e)}
+        getFav={() => this.getFav()}
+        getRepo={() => this.getRepo()}
       />
     );
   }
