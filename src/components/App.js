@@ -12,12 +12,18 @@ class App extends Component {
     };
   }
 
+  getGitGubApiUrl(username, type) {
+    const internalUser = username ? `/${username}` : "";
+    const internalType = type ? `/${type}` : "";
+    return `http://api.github.com/users${internalUser}${internalType}`;
+  }
+
   handleSearch(e) {
     const value = e.target.value;
     const keyCode = e.wich || e.keyCode;
     const ENTER = 13;
     if (keyCode === ENTER) {
-      fetch(`http://api.github.com/users/${value}`)
+      fetch(this.getGitGubApiUrl(value))
         .then(res => res.json())
         .then(result =>
           this.setState({
@@ -30,15 +36,18 @@ class App extends Component {
               following: result.following,
               reposURL: result.repos_url,
               favoritsURL: result.subscriptions_url
-            }
+            },
+            repos: [],
+            starred: []
           })
         );
     }
   }
 
   getRepo(link) {
-    return e => {
-      fetch(`http://api.github.com/users/wiliamtaesunglee/${link}`)
+    return () => {
+      const username = this.state.userinfo.login;
+      fetch(this.getGitGubApiUrl(username, link))
         .then(res => res.json())
         .then(result => {
           this.setState({
