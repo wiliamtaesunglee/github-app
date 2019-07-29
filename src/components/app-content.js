@@ -29,8 +29,8 @@ const AppContent = ({
 );
 
 AppContent.propTypes = {
-  getFav: PropTypes.func,
-  getRepo: PropTypes.func,
+  getFav: PropTypes.func.isRequired,
+  getRepo: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   userinfo: PropTypes.object,
   repos: PropTypes.array.isRequired,

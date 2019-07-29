@@ -10,6 +10,7 @@ class App extends Component {
       repos: [],
       starred: []
     };
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   getGitGubApiUrl(username, type) {
@@ -22,7 +23,9 @@ class App extends Component {
     const value = e.target.value;
     const keyCode = e.wich || e.keyCode;
     const ENTER = 13;
+    const target = e.target;
     if (keyCode === ENTER) {
+      target.disabled = true;
       fetch(this.getGitGubApiUrl(value))
         .then(res => res.json())
         .then(result =>
@@ -40,7 +43,11 @@ class App extends Component {
             repos: [],
             starred: []
           })
-        );
+        )
+        .then(() => {
+          console.log("evento:", e);
+          target.disabled = false;
+        });
     }
   }
 
@@ -68,7 +75,7 @@ class App extends Component {
         userinfo={this.state.userinfo}
         repos={this.state.repos}
         starred={this.state.starred}
-        handleSearch={e => this.handleSearch(e)}
+        handleSearch={this.handleSearch}
         getFav={this.getRepo("starred")}
         getRepo={this.getRepo("repos")}
       />
